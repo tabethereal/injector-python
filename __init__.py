@@ -7,6 +7,7 @@ Features:
 - open_process(pid)
 - read_memory(address, length<=8)
 - write_memory(address, length<=8, value)
+- write_string(address, string)
 
 Author: tabethereal
 License: MIT License
@@ -100,4 +101,9 @@ def read_memory(address, length):
 
 def write_memory(address, length, value):
     WriteProcessMemory(open_process.process, LPVOID(address), byref(c_longlong(value)), length, None)
+
+def write_string(address, string):
+    stringbytes = string.encode() + b'\x00'
+    for offset, value in enumerate(stringbytes):
+        write_memory(address + offset, 1, value)
 
